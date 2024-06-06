@@ -12,8 +12,10 @@ import java.util.Scanner;
  * Hello world!
  *
  */
-public class Lox
-{
+public class Lox {
+
+    static boolean hadError = false;
+    
     public static void main(String[] args)  throws IOException {
 
 
@@ -55,13 +57,15 @@ public class Lox
         }
     }  
 
+    //Method helps to tell the user some syntax error occured at a given line
     static void error (int line, String message ) {
         report (line , " " , message);
     }
 
     private static void report  (int line , String where, String message) {
         System.err.println(
-            
+            "[line" + line + " ] Error" + where + ": " + message
         );
+        hadError = true;
     }
 }
