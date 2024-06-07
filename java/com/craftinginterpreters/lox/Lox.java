@@ -1,5 +1,4 @@
 package com.craftinginterpreters.lox;
-import static com.craftinginterpreters.lox.Scanner.*;
 
 
 import java.io.BufferedReader;
@@ -9,7 +8,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.List;
-import java.util.Scanner;
+
 /**
  * Hello world!
  *
@@ -51,11 +50,13 @@ public class Lox {
 
     private static void run  (String source ) {
         Scanner scanner = new Scanner(source);
+       // com.craftinginterpreters.lox.Scanner scanner = new com.craftinginterpreters.lox.Scanner(source);  //replaced the above line with gpt
         List <Token >  tokens = scanner.scanTokens(); //problematic code 
 
         //Print the tokens
         for (Token token : tokens) {
             System.out.println(token);
+
         }
     }  
 
