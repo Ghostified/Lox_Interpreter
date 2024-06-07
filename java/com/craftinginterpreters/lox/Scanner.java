@@ -71,9 +71,29 @@ class Scanner {
             case '"' : string ();break;
 
             default :
+                if (isDigit (c)) {
+                    number ();
+                } else {
                 Lox.error(line, "Unexpected Error. ");
+                }
                 break;
         }
+    }
+
+    //method to handles numbers 
+    private void number () {
+        while (isDigit(peek())) advance();
+
+        //look for fractional part i.e decimals
+        if (peek() == '.' && isDigit(peekNext())) {
+            //consume the "."
+            advance();
+
+            while (isDigit(peek())) advance();
+        }
+
+        addToken(NUMBER,
+        Double.parseDouble(source.substring(start, current)));
     }
 
     //Handling string literals
@@ -108,6 +128,15 @@ class Scanner {
     private char peek () {
         if (isAtEnd()) return '\0';
         return source.charAt(current);
+    }
+
+    private char peekNext () {
+        if  (current + 1 >= source.length()) return '\0';
+        return source.charAt(current + 1);
+    }
+
+    private boolean isDigit (char c) {
+        return c >= '0' && c <= '9';
     }
 
     //helper method to tell if we have  consumed all the tokens
