@@ -14,7 +14,30 @@ class Scanner {
 
     private int start = 0;
     private int current = 0;
-    private int line = 0;
+    private int line = 1;
+
+    private static final Map <String , TokenType > Keywords;
+    static {
+        Keywords = new HashMap<>();
+        Keywords.put("and", AND);
+        Keywords.put("class", CLASS);
+        Keywords.put("else", ELSE);
+        Keywords.put("false", FALSE);
+        Keywords.put("for", FOR);
+        Keywords.put("var", VAR);
+        Keywords.put("fun", FUN);
+        Keywords.put("if", IF);
+        Keywords.put("nil", NIL);
+        Keywords.put("or", OR);
+        Keywords.put("print", PRINT);
+        Keywords.put("return", RETURN);
+        Keywords.put("super", SUPER);
+        Keywords.put("this", THIS);
+        Keywords.put("true", TRUE);
+        Keywords.put("while", WHILE);
+
+
+    }
 
     Scanner (String source) {
         this.source = source;
@@ -23,8 +46,8 @@ class Scanner {
     List <Token> scanTokens () {
         while (!isAtEnd ()) {
             //we are at the beginning of the next lexeme
-            start =- current;
-            scanTokens();
+            start = current;
+            scanToken();
         } 
 
         tokens.add (new Token(EOF, " ", null, line));
@@ -42,7 +65,7 @@ class Scanner {
             case '.' : addToken (DOT); break;
             case '-' : addToken (MINUS) ; break;
             case '+' : addToken (PLUS ); break;
-            case ';' : addToken (SEMOCOLON); break;
+            case ';' : addToken (SEMICOLON); break;
             case '*' : addToken(STAR); break;
             case '!' : addToken(match ('=') ? BANG_EQUAL : BANG); break;
             case '=' : addToken(match ('=') ? EQUAL_EQUAL : EQUAL); break;
@@ -73,11 +96,23 @@ class Scanner {
             default :
                 if (isDigit (c)) {
                     number ();
-                } else {
+                }  else if (isAlpha(c)) {
+                    identifier ();
+                }
+                else {
                 Lox.error(line, "Unexpected Error. ");
                 }
                 break;
         }
+    }
+
+    private void identifier () {
+        while (isAlphanumeric(peek())) advance();
+
+        String text = source.substring(start, current);
+        TokenType type = Keywords.get(text);
+        if (type == null) type = IDENTIFIER;
+        addToken(type);
     }
 
     //method to handles numbers 
@@ -133,6 +168,16 @@ class Scanner {
     private char peekNext () {
         if  (current + 1 >= source.length()) return '\0';
         return source.charAt(current + 1);
+    }
+
+    private boolean isAlpha (char c) {
+        return ( c >= 'a' && c <= 'z') ||
+               ( c >= 'A' && c <= 'Z') ||
+                c == '_';
+    }
+
+    private boolean isAlphanumeric ( char c) {
+        return isAlpha(c) || isDigit(c);
     }
 
     private boolean isDigit (char c) {
