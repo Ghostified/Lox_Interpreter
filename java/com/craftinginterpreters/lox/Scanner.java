@@ -14,7 +14,7 @@ class Scanner {
 
     private int start = 0;
     private int current = 0;
-    private int line = 0;
+    private int line = 1;
 
     private static final Map <String , TokenType > Keywords;
     static {
@@ -46,8 +46,8 @@ class Scanner {
     List <Token> scanTokens () {
         while (!isAtEnd ()) {
             //we are at the beginning of the next lexeme
-            start =- current;
-            scanTokens();
+            start = current;
+            scanToken();
         } 
 
         tokens.add (new Token(EOF, " ", null, line));
@@ -65,7 +65,7 @@ class Scanner {
             case '.' : addToken (DOT); break;
             case '-' : addToken (MINUS) ; break;
             case '+' : addToken (PLUS ); break;
-            case ';' : addToken (SEMOCOLON); break;
+            case ';' : addToken (SEMICOLON); break;
             case '*' : addToken(STAR); break;
             case '!' : addToken(match ('=') ? BANG_EQUAL : BANG); break;
             case '=' : addToken(match ('=') ? EQUAL_EQUAL : EQUAL); break;

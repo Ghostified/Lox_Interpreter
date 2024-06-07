@@ -1,4 +1,6 @@
 package com.craftinginterpreters.lox;
+import static com.craftinginterpreters.lox.Scanner.*;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,7 +51,7 @@ public class Lox {
 
     private static void run  (String source ) {
         Scanner scanner = new Scanner(source);
-        List <Token >  tokens = scanner.scanTokens () ;
+        List <Token >  tokens = scanner.scanTokens(); //problematic code 
 
         //Print the tokens
         for (Token token : tokens) {
